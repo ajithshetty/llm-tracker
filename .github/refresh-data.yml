@@ -1,0 +1,41 @@
+name: Refresh model data
+
+# Runs the fetch -> Claude summarize -> JSON pipeline with no server involved,
+# then commits the result back into the repo. This is what replaces the
+# "Fetch live data" button when there's no backend running (e.g. on
+# GitHub Pages) — you trigger it here instead, manually or on a schedule.
+on:
+  schedule:
+    - cron: "0 6 * * *"   # once a day at 06:00 UTC — adjust or remove as you like
+  workflow_dispatch: {}     # adds a "Run workflow" button on the Actions tab
+
+permissions:
+  contents: write
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install backend dependencies
+        working-directory: backend
+        run: pip install -r requirements.txt
+
+      - name: Run pipeline
+        working-directory: backend
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: python scripts/fetch_once.py
+
+      - name: Commit updated data
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add backend/data/models.json
+          git diff --staged --quiet || git commit -m "chore: refresh model data [skip ci]"
+          git push
