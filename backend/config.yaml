@@ -1,0 +1,190 @@
+# ---------------------------------------------------------------------------
+# LLM Release Ledger — backend configuration
+#
+# ${VAR_NAME} anywhere in this file is substituted from environment variables
+# (or a .env file) at load time. Never commit real API keys — use env vars.
+# ---------------------------------------------------------------------------
+
+server:
+  host: "0.0.0.0"
+  port: 8000
+  # Origins allowed to call this API (your frontend's dev/prod URLs)
+  cors_origins:
+    - "http://localhost:5173"
+    - "http://localhost:3000"
+    - "http://localhost"
+
+features:
+  # Master switch for the "Fetch live data" button/endpoint.
+  # Set to false to disable POST /api/fetch-live entirely (returns 423 Locked).
+  # The frontend should poll GET /api/status and hide/disable the button
+  # when live_fetch_enabled is false.
+  enable_live_fetch: true
+
+anthropic:
+  # Set ANTHROPIC_API_KEY in your environment / .env file — never hardcode it.
+  api_key: "${ANTHROPIC_API_KEY}"
+  model: "claude-sonnet-5"
+  max_tokens: 4000
+
+storage:
+  # Where the summarized data lands. The frontend reads from this file
+  # via GET /api/models (served by this same backend).
+  output_path: "./data/models.json"
+  backup_dir: "./data/backups"
+  keep_backups: 10
+
+# ---------------------------------------------------------------------------
+# Sources
+# ---------------------------------------------------------------------------
+sources:
+  # Open-weight models: live-fetched from the public Hugging Face API
+  # (https://huggingface.co/api/models/{repo}) for real download/like counts.
+  huggingface:
+    base_url: "https://huggingface.co/api/models"
+    timeout_seconds: 15
+    repos:
+      - id: llama-4-scout
+        name: "Llama 4 Scout"
+        provider: "Meta"
+        repo: "meta-llama/Llama-4-Scout-17B-16E-Instruct"
+        release: "2025-04-05"
+        context: 10000000
+        price_in: null
+        price_out: null
+      - id: llama-4-maverick
+        name: "Llama 4 Maverick"
+        provider: "Meta"
+        repo: "meta-llama/Llama-4-Maverick-17B-128E-Instruct"
+        release: "2025-04-05"
+        context: 1000000
+        price_in: null
+        price_out: null
+      - id: deepseek-v3-2
+        name: "DeepSeek V3.2"
+        provider: "DeepSeek"
+        repo: "deepseek-ai/DeepSeek-V3.2"
+        release: "2025-12-01"
+        context: 128000
+        price_in: null
+        price_out: null
+      - id: deepseek-v4-pro
+        name: "DeepSeek V4 Pro"
+        provider: "DeepSeek"
+        repo: "deepseek-ai/DeepSeek-V4-Pro"
+        release: "2026-04-24"
+        context: 1000000
+        price_in: 0.435
+        price_out: 0.87
+      - id: mistral-medium-3-5
+        name: "Mistral Medium 3.5"
+        provider: "Mistral"
+        repo: "mistralai/Mistral-Medium-3.5-128B"
+        release: "2026-04-29"
+        context: 256000
+        price_in: null
+        price_out: null
+      - id: qwen3-5-35b
+        name: "Qwen3.5 35B A3B"
+        provider: "Alibaba"
+        repo: "Qwen/Qwen3.5-35B-A3B"
+        release: "2026-04-27"
+        context: 1010000
+        price_in: null
+        price_out: null
+
+  # Closed, API-only models: no live source exists (providers don't publish
+  # usage data), so these are maintained here as static reference data.
+  # Update this list as new models ship or prices change.
+  static_models:
+    - id: gpt-4-1
+      name: "GPT-4.1"
+      provider: "OpenAI"
+      release: "2025-04-14"
+      context: 1000000
+      price_in: 2.00
+      price_out: 8.00
+    - id: gpt-5-1
+      name: "GPT-5.1"
+      provider: "OpenAI"
+      release: "2025-11-13"
+      context: 400000
+      price_in: 1.25
+      price_out: 10.00
+    - id: gpt-5-5
+      name: "GPT-5.5"
+      provider: "OpenAI"
+      release: "2026-04-24"
+      context: 1050000
+      price_in: 5.00
+      price_out: 30.00
+    - id: haiku-4-5
+      name: "Claude Haiku 4.5"
+      provider: "Anthropic"
+      release: "2025-10-15"
+      context: 200000
+      price_in: 1.00
+      price_out: 5.00
+    - id: sonnet-4-6
+      name: "Claude Sonnet 4.6"
+      provider: "Anthropic"
+      release: "2026-02-01"
+      context: 1000000
+      price_in: 3.00
+      price_out: 15.00
+    - id: opus-4-8
+      name: "Claude Opus 4.8"
+      provider: "Anthropic"
+      release: "2026-05-28"
+      context: 1000000
+      price_in: 5.00
+      price_out: 25.00
+    - id: gemini-2-5-pro
+      name: "Gemini 2.5 Pro"
+      provider: "Google"
+      release: "2025-03-25"
+      context: 1000000
+      price_in: 1.25
+      price_out: 10.00
+    - id: gemini-3-1-pro
+      name: "Gemini 3.1 Pro"
+      provider: "Google"
+      release: "2026-02-19"
+      context: 2000000
+      price_in: 2.00
+      price_out: 12.00
+    - id: gemini-3-5-flash
+      name: "Gemini 3.5 Flash"
+      provider: "Google"
+      release: "2026-05-19"
+      context: 1000000
+      price_in: 1.50
+      price_out: 9.00
+    - id: grok-4-1-fast
+      name: "Grok 4.1 Fast"
+      provider: "xAI"
+      release: "2025-09-19"
+      context: 2000000
+      price_in: 0.20
+      price_out: 0.50
+    - id: grok-4
+      name: "Grok 4"
+      provider: "xAI"
+      release: "2025-07-09"
+      context: 256000
+      price_in: 3.00
+      price_out: 15.00
+    - id: grok-4-3
+      name: "Grok 4.3"
+      provider: "xAI"
+      release: "2026-04-30"
+      context: 1000000
+      price_in: 1.25
+      price_out: 2.50
+    - id: qwen3-6-max
+      name: "Qwen3.6 Max Preview"
+      provider: "Alibaba"
+      release: "2026-04-27"
+      context: 262000
+      price_in: 1.04
+      price_out: 6.24
