@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-07-10T20:52:09.084329+00:00",
-  "summary": "Records span from Gemini 2.5 Pro (2025-03-25) to Claude Opus 4.8 (2026-05-28), the newest model in this dataset. Among open-weight models, Qwen3.5 35B A3B has the highest Hugging Face download count (2,302,891), followed closely by DeepSeek V3.2. All closed-weight models correctly show null pricing-independent fields and hf_status 'n/a' since they aren't hosted on Hugging Face, and no fetch errors were present in any of the open-weight lookups.",
+  "generated_at": "2026-07-10T21:29:29.348284+00:00",
+  "summary": "The dataset spans models released from March 2025 through the newest entry, Claude Opus 4.8, dated 2026-05-28. Among open-weight models, Qwen3.5 35B A3B has the highest Hugging Face download count (2,302,891), narrowly ahead of DeepSeek V3.2 and DeepSeek V4 Pro. All Hugging Face lookups returned successfully with no fetch errors, and closed-weight models (OpenAI, Anthropic, Google, xAI) correctly show null download/like/repo data since they are not hosted on Hugging Face.",
   "models": [
     {
       "id": "gemini-2-5-pro",
