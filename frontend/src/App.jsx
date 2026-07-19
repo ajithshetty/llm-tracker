@@ -341,11 +341,11 @@ export default function App() {
             {STATIC_MODE ? (
               <>
                 <div className="fetch-meta" style={{ fontSize: 11.5, color: "#8B929C" }}>
-                  Refreshed automatically by a scheduled GitHub Action
+                  Refreshed by a scheduled GitHub Action
                 </div>
                 {REPO_URL && (
-                  <a className="hf-link" href={`${REPO_URL}/actions/workflows/refresh-data.yml`} target="_blank" rel="noreferrer">
-                    <ExternalLink size={11} /> View / trigger a refresh run
+                  <a className="hf-link" href={`${REPO_URL}`} target="_blank" rel="noreferrer">
+                    <ExternalLink size={11} /> View in GitHub
                   </a>
                 )}
               </>
