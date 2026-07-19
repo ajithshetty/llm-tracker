@@ -6,7 +6,7 @@ name: Refresh model data
 # GitHub Pages) — you trigger it here instead, manually or on a schedule.
 on:
   schedule:
-    - cron: "0 6 * * *"   # once a day at 06:00 UTC — adjust or remove as you like
+    # - cron: "0 6 * * *"   # once a day at 06:00 UTC — adjust or remove as you like
   workflow_dispatch: {}     # adds a "Run workflow" button on the Actions tab
 
 permissions:
